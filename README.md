@@ -1,5 +1,5 @@
 
-## CraftCMS in Docker
+## CraftCMS on Docker
 
 ### Usage
 
@@ -15,7 +15,6 @@
     COPY ./src/templates /var/www/craft/templates
     COPY ./html /var/www/html
 
-    EXPOSE 80
 
 
 Your source code folder should have a html folder for public apache data and a src folder for craft data.
@@ -33,9 +32,11 @@ You can now work locally while running a (more or less) production env.
 
 #### In Production
 
-Build your image using the above dockerfile
+Build your image using the above docker file snippet
 
-set:
+#### ENV Vars
+
+if you use the bundled config you can set:
 
  DB_HOST
  DB_NAME
