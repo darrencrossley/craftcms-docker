@@ -21,8 +21,8 @@ RUN apt-get install -y \
     && docker-php-ext-install mbstring
 
 # install nodejs and npm
-RUN apt-get install nodejs && \
-    apt-get install npm
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN apt-get install -y nodejs
 
 # install php pdo_mysql
 RUN docker-php-ext-install pdo pdo_mysql
