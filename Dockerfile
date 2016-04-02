@@ -20,6 +20,9 @@ RUN apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-install mbstring
 
+# install nodejs and npm
+RUN apt-get install nodejs && \
+    apt-get install npm
 
 # install php pdo_mysql
 RUN docker-php-ext-install pdo pdo_mysql
