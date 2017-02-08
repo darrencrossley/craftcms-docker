@@ -3,7 +3,7 @@ FROM php:7.0-apache
 # Dependencies
 RUN apt-get update && \
     apt-get -yq install \
-    wget git pwgen unzip \
+    wget git pwgen unzip tar bzip2 \
     libz-dev \
     libsasl2-dev \
     libmagickwand-dev --no-install-recommends
