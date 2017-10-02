@@ -1,13 +1,18 @@
 FROM php:7.0-apache
 
 # Dependencies
+
+# Add publickey for yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+# Update and Install Base Dependencies
 RUN apt-get update && \
     apt-get -yq install \
     wget git pwgen unzip tar bzip2 \
     libz-dev \
     libsasl2-dev \
     libmagickwand-dev --no-install-recommends
-
 
 # Install modules : GD mcrypt iconv
 RUN apt-get install -y \
@@ -20,14 +25,14 @@ RUN apt-get install -y \
     && docker-php-ext-install gd \
     && docker-php-ext-install mbstring
 
-# install nodejs and npm
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
-RUN apt-get install -y nodejs
+# install Nodejs and Yarn
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs yarn
 
-# install php pdo_mysql
+# install PHP pdo_mysql
 RUN docker-php-ext-install pdo pdo_mysql
 
-# memcached module
+# Install Memcached Module
 RUN apt-get install -y libmemcached-dev
 RUN curl -o /root/memcached.zip https://github.com/php-memcached-dev/php-memcached/archive/php7.zip -L
 RUN cd /root && unzip memcached.zip && rm memcached.zip && \
@@ -36,8 +41,6 @@ RUN cd /root && unzip memcached.zip && rm memcached.zip && \
  cd /root && rm -rf /root/php-memcached-* && \
  echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini  && \
  echo "memcached.use_sasl = 1" >> /usr/local/etc/php/conf.d/memcached.ini
-
-
 
 # memcached module with sasl
 RUN curl -o /root/libmemcached.tar.gz https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz -L
