@@ -1,21 +1,20 @@
 FROM php:7.0-apache
 
-# Dependencies
+# Update and Install Base Dependencies
+RUN apt-get update && \
+    apt-get -yq install \
+    wget apt-transport-https git pwgen unzip tar bzip2 \
+    libz-dev \
+    libsasl2-dev \
+    libmagickwand-dev --no-install-recommends
 
 # Add publickey for yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-# Update and Install Base Dependencies
+# Install modules : GD mcrypt iconv
 RUN apt-get update && \
     apt-get -yq install \
-    wget git pwgen unzip tar bzip2 \
-    libz-dev \
-    libsasl2-dev \
-    libmagickwand-dev --no-install-recommends
-
-# Install modules : GD mcrypt iconv
-RUN apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
@@ -27,13 +26,13 @@ RUN apt-get install -y \
 
 # install Nodejs and Yarn
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN apt-get install -y nodejs yarn
+RUN apt-get install -yq nodejs yarn
 
 # install PHP pdo_mysql
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Install Memcached Module
-RUN apt-get install -y libmemcached-dev
+RUN apt-get install -yq libmemcached-dev
 RUN curl -o /root/memcached.zip https://github.com/php-memcached-dev/php-memcached/archive/php7.zip -L
 RUN cd /root && unzip memcached.zip && rm memcached.zip && \
  cd php-memcached-php7 && \
